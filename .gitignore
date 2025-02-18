@@ -1,0 +1,37 @@
+# Eclipse specific files
+/.settings/
+/bin/
+/tmp/
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+.metadata
+.recommenders/
+
+# Project specific files
+*.class
+*.war
+*.ear
+
+# Maven specific files
+target/
+!**/src/main/resources/**
+!**/src/test/resources/**
+
+# Package files
+*.war
+*.ear
+
+# Log files
+*.log
+
+# Build directories
+build/
+build/*
+
+# Eclipse project files
+*.launch
+*.classpath
+*.project
