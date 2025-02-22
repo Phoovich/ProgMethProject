@@ -26,10 +26,11 @@ public class GameLogic {
 
     public void updateBullets() {
         List<Bullet> toRemove = new ArrayList<>();
+        double currentWorldWidth = world.getPrefWidth(); // Get the dynamic world width
         for (Bullet bullet : bullets) {
             bullet.update();
-            // Remove bullets if they go off-screen
-            if (bullet.getX() > WORLD_WIDTH || bullet.getX() < 0) {
+            // Remove bullet if it goes beyond the current world width or before 0
+            if (bullet.getX() > currentWorldWidth || bullet.getX() < 0) {
                 toRemove.add(bullet);
             }
         }
