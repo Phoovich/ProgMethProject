@@ -2,6 +2,8 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -13,9 +15,9 @@ import java.util.List;
 import java.util.Set;
 
 public class Main extends Application {
-    private static final double SCENE_WIDTH = 1000;
-    private static final double SCENE_HEIGHT = 400;
-    private static final double WORLD_WIDTH = 5000;
+    private static final double SCENE_WIDTH = 1280;
+    private static final double SCENE_HEIGHT = 720;
+    private static final double WORLD_WIDTH = 1280;
 
     private Pane world;
     private Player player;
@@ -28,10 +30,17 @@ public class Main extends Application {
         // Set up root pane and world
         Pane root = new Pane();
         root.setPrefSize(SCENE_WIDTH, SCENE_HEIGHT);
-        root.setStyle("-fx-background-color: skyblue;");
 
         world = new Pane();
         world.setPrefSize(WORLD_WIDTH, SCENE_HEIGHT);
+
+        // Load and set the background image
+        Image bgImage = new Image(ClassLoader.getSystemResource("map.png").toExternalForm());
+        ImageView bgView = new ImageView(bgImage);
+        bgView.setFitWidth(WORLD_WIDTH);  // Stretch to match world size
+        bgView.setFitHeight(SCENE_HEIGHT);
+
+        world.getChildren().add(bgView); // Add background first so other objects render on top
 
         // Create the map (ground and platforms)
         createMap();
@@ -61,22 +70,21 @@ public class Main extends Application {
             @Override
             public void handle(long now) {
                 Platform.runLater(() -> {
-                    // Update player's movement
                     player.update(activeKeys, world, SCENE_HEIGHT);
                     
-                    // Camera following logic:
                     double offsetX = SCENE_WIDTH / 2 - (player.getX() + Player.PLAYER_SIZE / 2);
-                    // Clamp offset so the world doesn't scroll past its boundaries
                     offsetX = Math.min(0, offsetX);
                     offsetX = Math.max(SCENE_WIDTH - WORLD_WIDTH, offsetX);
+                    
                     world.setTranslateX(offsetX);
+                    bgView.setTranslateX(offsetX); // Moves background with world
                 });
                 gameLogic.updateBullets();
             }
         };
         timer.start();
 
-        primaryStage.setTitle("Contra-Style Shooting Game (Free Bullets)");
+        primaryStage.setTitle("Contra-Style Shooting Game");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
